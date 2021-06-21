@@ -82,6 +82,7 @@ const intersection = new IntersectionObserver(entries=>{
         if(entry.isIntersecting){
             let container = entry.target;
             let data_src = container.getAttribute('data-src')
+            // entry.setAttribute('src',data_src)
             container.src = data_src;
             intersection.unobserve(container);
         }
