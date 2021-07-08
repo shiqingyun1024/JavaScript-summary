@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发布订阅模式</title>
+</head>
+
+<body>
+    <script>
+        class pubSub {
+            constructor() {
+                this.eventArray = {}
+            }
+            emit(eventName) {
+                this.eventArray[eventName].forEach(cb => {
+                    cb()
+                });
+            }
+            on(eventName, callback) {
+                if (!this.eventArray[eventName]) {
+                    this.eventArray[eventName] = []
+                }
+                this.eventArray[eventName].push(callback)
+            }
+        }
+
+        let pubSubItem = new pubSub()
+
+        pubSubItem.on('name', () => {
+            console.log('订阅1');
+        })
+        pubSubItem.on('name', () => {
+            console.log('订阅2');
+        })
+        pubSubItem.emit('name')
+
+    </script>
+</body>
+
+</html>
