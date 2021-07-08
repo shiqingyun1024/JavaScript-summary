@@ -14,28 +14,44 @@
             constructor() {
                 this.eventArray = {}
             }
-            emit(eventName) {
+            // 发布
+            // 这个地方涉及到了es6中的函数的rest 参数的使用，publishInfo是一个数组，它代表着传入的参数，可以是任意多个。
+            emit(eventName,...publishInfo) {
                 this.eventArray[eventName].forEach(cb => {
-                    cb()
+                    cb(...publishInfo)
                 });
             }
+            // 订阅
             on(eventName, callback) {
                 if (!this.eventArray[eventName]) {
                     this.eventArray[eventName] = []
                 }
                 this.eventArray[eventName].push(callback)
             }
+            // 移除订阅
+            remove(eventName){
+                if(this.eventArray[eventName]){
+                    this.eventArray[eventName] = []
+                }
+            }
         }
 
         let pubSubItem = new pubSub()
 
-        pubSubItem.on('name', () => {
-            console.log('订阅1');
+        pubSubItem.on('name', (...info) => {
+            // console.log(info); // [" 通知到了", " 请去售楼部"]  所以需要先转化为字符串，再拼接上。
+            console.log('订阅1'+info.join());
         })
-        pubSubItem.on('name', () => {
-            console.log('订阅2');
+        pubSubItem.on('name1', (info) => {  // 参数这样写的话，info是数组中其中的一项，是个字符串。
+            // console.log(info); // " 通知到了"
+            console.log('订阅2'+info);
         })
-        pubSubItem.emit('name')
+        pubSubItem.emit('name',' 通知到了',' 请去售楼部')
+        pubSubItem.emit('name1',' 开盘了')
+        
+        // 移除订阅事件
+        pubSubItem.remove('name1')
+        pubSubItem.emit('name1',' 请去售楼部')
 
     </script>
 </body>
