@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>发布订阅模式</title>
+</head>
+
+<body>
+    <script>
+        class pubSub {
+            constructor() {
+                this.eventArray = {}
+            }
+            //  订阅 
+            on(eventName, cb) {
+                !this.eventArray[eventName] && (this.eventArray[eventName] = [])
+                this.eventArray[eventName].push(cb)
+            }
+            // <!-- 发布 -->
+            emit(eventName, ...publishInfo) {
+                this.eventArray[eventName].length > 0 && this.eventArray[eventName].forEach(cb => {
+                    cb(...publishInfo)
+                })
+            }
+            // <!-- 移除订阅发布 -->
+            remove(eventName) {
+                this.eventArray[eventName] && (this.eventArray[eventName] =[])
+            }
+
+        }
+        const pubsub = new pubSub()
+        // 订阅---先登记信息，收集信息
+        pubsub.on('name',(...publishInfo)=>{
+            console.log('订阅name任务'+publishInfo);
+        })
+
+        pubsub.on('name2',(...publishInfo)=>{
+            console.log('订阅name任务---'+publishInfo);
+        })
+
+        // 发布---根据信息通知客户，执行信息
+        pubsub.emit('name','name东西到了，过来拿吧')
+        pubsub.emit('name2','name2东西到了，过来拿吧')
+
+        // 取消订阅发布
+        pubsub.remove('name')
+
+        pubsub.emit('name','你的东西到了，过来拿吧') // 这个时候就不会打印执行了
+
+        
+    </script>
+</body>
+
+</html>
