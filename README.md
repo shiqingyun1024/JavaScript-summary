@@ -81,7 +81,7 @@ function Person(){}
 let person1 = new Person()
 person1对象本身不具有constructor属性，所以会通过__proto__属性到原型链中找，而person1.__proto__=== Person.prototype，Person.prototype具有constructor属性并指向了Person，所以person1.constructor指向了Person，它不是person自己本身拥有的，是继承而来的。
 
-
+**注意：单从constructor这个属性来讲，只有prototype对象才有。每个函数在创建的时候，JS会同时创建一个该函数对应的prototype对象，而函数创建的对象.__proto__ === 该函数.prototype，该函数.prototype.constructor===该函数本身。故通过函数创建的对象即使自己没有constructor属性，它也能通过__proto__找到对应的constructor，所以任何对象最终都可以找到其构造函数（null如果当成对象的话，将null除外）。记住，单从constructor这个属性来讲，只有prototype对象才有，所以才能实现继承。**
 
 ```
 
