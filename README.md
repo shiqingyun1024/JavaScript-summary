@@ -47,7 +47,7 @@ let Person = {
 ```
 我们需要牢记两点：①__proto__和constructor属性是对象(函数也是对象，所以也有这两个属性，通过new构造函数生成的实例也是对象)所独有的；② prototype属性是函数所独有的。但是由于JS中函数也是一种对象，所以函数也拥有__proto__和constructor属性.
 
-prototype 属性
+1、prototype 属性
 每个函数都会创建一个prototype属性，prototype属性是函数独有的。prototype的含义是函数的原型对象，也就是这个函数（其实所有函数都可以作为构造函数）所创建的实例的原型对象，由此可知(以下面的为例)
 function Person(){} 
 let person1 = new Person()
@@ -58,7 +58,7 @@ person1.__proto__ === Person.prototype  true 它们两个完全一样
 
 **注意：prototype属性是函数独有的，任何函数在创建的时候，其实会默认同时创建该函数的prototype对象，保存着所有实例共享的属性和方法，是所有实例的原型对象。**
 
-__proto__ 属性
+2、__proto__ 属性
 __proto__属性是对象独有的，每个实例（通过构造函数生成对的实例都是对象，函数也是对象，所以函数也有__proto__）上面都有__proto__ 属性，它指向原型对象（构造函数的prototype属性），以下面的代码为例进行说明：
 function Person(){} 
 let person1 = new Person()
@@ -68,7 +68,20 @@ person1.__proto__ === Person.prototype  true 它们两个完全一样。
 
 它的作用就是当访问一个对象的属性时，如果该对象内部不存在这个属性，那么就会去它的__proto__属性所指向的那个对象（可以理解为父对象）里找，如果父对象也不存在这个属性，则继续往父对象的__proto__属性所指向的那个对象（可以理解为爷爷对象）里找，如果还没找到，则继续往上找…直到原型链顶端null（可以理解为原始人。。。），再往上找就相当于在null上取值，会报错（可以理解为，再往上就已经不是“人”的范畴了，找不到了，到此结束，null为原型链的终点），由以上这种通过__proto__属性来连接对象直到null的一条链即为我们所谓的原型链。
 原型链实现了继承。
-person1中一个属性在本身里面找不到，会到__proto__属性所指向的那个对象（也就是原型对象，可以称为父对象）中找，也就是Person.prototype，Person.prototype是一个对象，所以也有__proto__属性，如果在Person.prototype也找不到，会去Person.prototype.__proto__中寻找，也就是person1.__proto__.__proto__（Person.prototype.__proto__ === person1.__proto__.__proto__），如果还找不到，就继续往上找，Person.prototype.__proto__.__proto__。
+person1中一个属性在本身里面找不到，会到__proto__属性所指向的那个对象（也就是原型对象，可以称为父对象）中找，也就是Person.prototype，Person.prototype是一个对象，所以也有__proto__属性，如果在Person.prototype也找不到，会去Person.prototype.__proto__中寻找，也就是person1.__proto__.__proto__（Person.prototype.__proto__ === person1.__proto__.__proto__），如果还找不到，就继续往上找，Person.prototype.__proto__.__proto__，直到最后Person.prototype.__proto__.__proto__.__proto__ === null
+其实我们平时调用的字符串方法、数组方法、对象方法、函数方法等都是靠__proto__继承而来的。
+
+**注意：__proto__属性是对象上的属性，一般都是通过构造函数生成的实例对象所具有的属性，指向构造函数的prototype的属性（原型对象），也可以说指向了共享对象，即实例的原型对象（共享对象）。所以可以说__proto__属性就是原型对象，它本身也有__proto__，指向Object.prototype，Object.prototype.__proto__指向了null。**
+
+3、constructor属性
+constructor属性也是对象才拥有的，它是从一个对象指向一个函数，含义就是指向该对象的构造函数，每个对象都有构造函数（本身拥有或继承而来，继承而来的要结合__proto__属性查看会更清楚点，如下图所示），从上图中可以看出Function这个对象比较特殊，它的构造函数就是它自己（因为Function可以看成是一个函数，也可以是一个对象），所有函数和对象最终都是由Function构造函数得来，所以constructor属性的终点就是Function这个函数。
+
+感谢网友的指出，这里解释一下上段中“每个对象都有构造函数”这句话。这里的意思是每个对象都可以找到其对应的constructor，因为创建对象的前提是需要有constructor，而这个constructor可能是对象自己本身显式定义的或者通过__proto__在原型链中找到的。而单从constructor这个属性来讲，只有prototype对象才有。每个函数在创建的时候，JS会同时创建一个该函数对应的prototype对象，而函数创建的对象.__proto__ === 该函数.prototype，该函数.prototype.constructor===该函数本身，故通过函数创建的对象即使自己没有constructor属性，它也能通过__proto__找到对应的constructor，所以任何对象最终都可以找到其构造函数（null如果当成对象的话，将null除外）。如下：
+function Person(){} 
+let person1 = new Person()
+person1对象本身不具有constructor属性，所以会通过__proto__属性到原型链中找，而person1.__proto__=== Person.prototype，Person.prototype具有constructor属性并指向了Person，所以person1.constructor指向了Person，它不是person自己本身拥有的，是继承而来的。
+
+
 
 ```
 
