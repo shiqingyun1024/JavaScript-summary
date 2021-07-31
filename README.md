@@ -1,5 +1,50 @@
 # JavaScript-summary
+```
 JavaScript基础、相关语法、相关应用等的总结
+**注意：** 这种方式是我自己按照自己的理解做的标注，以便于以后重点查阅。
+```
+
+## 基础（Javascript高级程序设计）
+
+### 8、对象、类与面向对象编程
+```
+本章内容：
+1、理解对象
+2、理解对象创建过程
+3、理解继承
+4、理解类
+```
+#### 8.1、理解对象
+```
+什么是对象？
+答：对象就是一组属性的无序集合。对象就是一组没有特定顺序的值。
+
+对象的每个属性或方法都由一个名称来标识，这个名称映射到一个值。
+
+创建对象的方式：
+1、创建自定义对象的通常方式是创建Object的一个新实例，然后再给它添加属性和方法。new Object
+let Person = new Object()
+Person.name = 'shiqingyun';
+Person.age = 29;
+Person.job = 'Software Engineer';
+Person.sayName = function(){
+    console.log(this.name)
+}
+2、使用对象字面量的方式
+用字面量的形式改写上面的例子如下：
+let Person = {
+    name : 'shiqingyun',
+    age : 29,
+    job : 'Software Engineer',
+    sayName() {
+      console.log(this.name)
+    }
+}
+对象中的这些属性都有自己的特征，而这些特征决定了它们在JavaScript中的行为。 
+**注意：属性决定行为（就是用来干什么的）**
+
+
+```
 
 ## JavaScript相关应用
 
