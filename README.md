@@ -45,15 +45,28 @@ let Person = {
 ```
 #### 8.2.4、原型模式
 ```
+我们需要牢记两点：①__proto__和constructor属性是对象所独有的；② prototype属性是函数所独有的。但是由于JS中函数也是一种对象，所以函数也拥有__proto__和constructor属性.
+
+prototype 属性
 每个函数都会创建一个prototype属性，prototype属性是函数独有的。prototype的含义是函数的原型对象，也就是这个函数（其实所有函数都可以作为构造函数）所创建的实例的原型对象，由此可知(以下面的为例)
 function Person(){} 
 let person1 = new Person()
 由此可知
-person1.__proto__ = Person.prototype  它们两个完全一样
+person1.__proto__ === Person.prototype  true 它们两个完全一样
 那prototype属性的作用又是什么呢？它的作用就是包含可以由特定类型的所有实例共享的属性和方法，也就是让该函数所实例化的对象们都可以找到公用的属性和方法。
 任何函数在创建的时候，其实会默认同时创建该函数的prototype对象。
 
 **注意：prototype属性是函数独有的，任何函数在创建的时候，其实会默认同时创建该函数的prototype对象，保存着所有实例共享的属性和方法，是所有实例的原型对象。**
+
+__proto__ 属性
+__proto__属性是对象独有的，它指向原型对象（构造函数的prototype属性），以下面的代码为例进行说明：
+function Person(){} 
+let person1 = new Person()
+先强调一下new Person()生成的是一个对象（可以参考new的过程），所以person1是一个实例对象。
+所以person1具有__proto__属性，__proto__属性指向构造函数的prototype（原型对象）
+person1.__proto__ === Person.prototype  true 它们两个完全一样。
+
+它的作用就是当访问一个对象的属性时，如果该对象内部不存在这个属性，那么就会去它的__proto__属性所指向的那个对象（可以理解为父对象）里找，如果父对象也不存在这个属性，则继续往父对象的__proto__属性所指向的那个对象（可以理解为爷爷对象）里找，如果还没找到，则继续往上找…直到原型链顶端null（可以理解为原始人。。。），再往上找就相当于在null上取值，会报错（可以理解为，再往上就已经不是“人”的范畴了，找不到了，到此结束，null为原型链的终点），由以上这种通过__proto__属性来连接对象直到null的一条链即为我们所谓的原型链。
 
 ```
 
