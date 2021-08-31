@@ -107,7 +107,20 @@ person1对象本身不具有constructor属性，所以会通过__proto__属性�
 4、constructor属性的含义就是指向该对象的构造函数，所有函数（此时看成对象了）最终的构造函数都指向Function。
 
 ```
-
+### 10、函数
+#### 10.11、函数属性与方法
+```
+        function a(name,age){
+            this.name = name;
+            this.age = age;
+        }
+        let b = {
+            name:'123'
+        }
+        // 调用call相当于给b加上了a的相关属性，需要看一下书上关于call和new的解释。
+        a.call(b,'xiaoming',18)
+        console.log(b);
+```
 ## JavaScript相关应用
 
 ### JavaScript 图片懒加载
