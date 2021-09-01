@@ -120,6 +120,9 @@ person1对象本身不具有constructor属性，所以会通过__proto__属性�
         // 调用call相当于给b加上了a的相关属性，需要看一下书上关于call和new的解释。
         a.call(b,'xiaoming',18)
         console.log(b);
+        关于call()和apply()需要好好总结一下，原理和本意，
+        控制函数调用上下文即函数体内this值的能力
+        可以将任意对象设置为任意函数的作用域。
 ```
 ## JavaScript相关应用
 
