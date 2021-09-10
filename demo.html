@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // async function a() {
+        //     await new Promise((resolve, reject) => {
+        //         setTimeout(function () {
+        //             resolve()
+        //         }, 3000)
+        //     })
+        //     // console.log('run1');
+        // }
+
+        // await sleep(3)
+
+        // console.log('run');
+        let a = {
+            address:'123'
+        }
+        let b = Object.create(a);
+        delete b.address
+        b.address = undefined;
+        console.log(b.address); // undefined
+        console.log(typeof b.address); // undefined
+
+    </script>
+</body>
+
+</html>

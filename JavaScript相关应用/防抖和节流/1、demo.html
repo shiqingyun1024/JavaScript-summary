@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防抖与节流</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+</head>
+<div id="demo">
+    <button @click="shakeClick">防抖点击</button>
+</div>
+
+<body>
+    <script>
+        let vue = new Vue({
+            el: '#demo',
+            methods: {
+                preventShake(func, delay) {
+                    let timeout = {};
+                    return function() {
+                        clearTimeout(timeout)
+                        timeout = setTimeout(() => {
+                            func.apply(this, arguments)
+                        }, delay)
+                    }
+                },
+                shakeClick() {
+                    this.preventShake(function () {
+                        console.log('123');
+                    }, 3000)()
+                }
+            }
+
+        })
+        // 防抖 连续重复操作的事件，只是最后一次生效，且在规定的时间之后触发
+        // function preventShake(func, delay) {
+        //     let timeout = {},
+        //     return function () {
+        //         clearTimeout(timeout)
+        //         timeout = setTimeout(() => {
+        //             func.apply(this, arguments)
+        //         }, delay)
+        //     }
+        // }
+        // preventShake(function () {
+        //     console.log('123');
+        // }, 3000)
+
+    </script>
+</body>
+
+</html>
