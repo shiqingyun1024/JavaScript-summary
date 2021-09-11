@@ -56,7 +56,7 @@
                 if (timeout) {
                     clearTimeout(timeout)
                 }
-                timeout = setTimeout(function () {
+                timeout = setTimeout(()=> {
                     func.apply(this, arguments)
                 }, delay)
             }
@@ -71,7 +71,8 @@
                     return
                 }
                 run = false;
-                setTimeout(function () {
+                // 弄清楚箭头函数和普通函数的中this的指向。
+                setTimeout(()=> {
                     func.apply(this, arguments);
                     run = true;
                 }, delay)
