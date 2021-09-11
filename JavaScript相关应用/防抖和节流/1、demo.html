@@ -25,60 +25,68 @@
 
 <body>
     <script>
-        const box = document.getElementById('box')
-        box.onmousemove = function (e) {
-            box.innerHTML = `${e.clientX}, ${e.clientY}`
-        }
         
-        let vm = new Vue({
-            el: '#demo',
-            data: {
-                timeout : null
-            },
-            methods: {
-                debounce() {
-                    if(this.timeout){
-                        clearTimeout(this.timeout)
-                    }
-                    this.timeout = setTimeout(()=>{
-                        this.a()
-                    },3000)
-                },
-                a(){
-                    console.log('123')
-                }
-            }
-        })
+
+
+        // let vm = new Vue({
+        //     el: '#demo',
+        //     data: {
+        //         timeout: null
+        //     },
+        //     methods: {
+        //         debounce() {
+        //             if (this.timeout) {
+        //                 clearTimeout(this.timeout)
+        //             }
+        //             this.timeout = setTimeout(() => {
+        //                 this.a()
+        //             }, 3000)
+        //         },
+        //         a() {
+        //             console.log('123')
+        //         }
+        //     }
+        // })
+        const box = document.getElementById('box')
         // 防抖函数 触发高频事件后n秒内函数只会执行一次，如果n秒内高频事件再次被触发，则重新计算时间
         // 应用场景：文本框输入搜索（连续输入时避免多次请求接口）
-        function debounce(func,delay){
+        function debounce(func, delay) {
             let timeout = null;
-            return function(){
-                if(timeout){
+            return function () {
+                if (timeout) {
                     clearTimeout(timeout)
                 }
-                timeout = setTimeout(function(){
-                    func.apply(this,arguments)
-                },delay)
+                timeout = setTimeout(function () {
+                    func.apply(this, arguments)
+                }, delay)
             }
 
         }
         // 节流函数 就是在一段时间内，只执行一次 高频事件触发，但在n秒内只会执行一次，所以节流会稀释函数的执行频率
         // 应用场景：防重复提交等
-        function throttle(func,delay){
+        function throttle(func, delay) {
             let run = true;
-            return function(){
-                if(!a){
+            return function () {
+                if (!run) {
                     return
                 }
                 run = false;
-                setTimeout(function(){
-                    func.apply(this,arguments);
+                setTimeout(function () {
+                    func.apply(this, arguments);
                     run = true;
-                },delay)
+                }, delay)
             }
         }
-        
+        // 防抖
+        box.onmousemove = debounce(function (e) {
+            box.innerHTML = `${e.clientX}, ${e.clientY}`
+        }, 1000)
+        // 节流
+        // box.onmousemove = throttle(function (e) {
+        //     box.innerHTML = `${e.clientX}, ${e.clientY}`
+        // }, 1000)
+
+
 
     </script>
 </body>
