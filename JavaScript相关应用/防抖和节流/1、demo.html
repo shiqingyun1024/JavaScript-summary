@@ -8,32 +8,60 @@
     <title>防抖与节流</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 </head>
+<style>
+    #box {
+        width: 1000px;
+        height: 500px;
+        background: #ccc;
+        font-size: 40px;
+        text-align: center;
+        line-height: 500px;
+    }
+</style>
 <div id="demo">
-    <button @click="shakeClick">防抖点击</button>
+    <button @click="debounce">防抖点击</button>
 </div>
+<div id="box"></div>
 
 <body>
     <script>
-        let vue = new Vue({
+        const box = document.getElementById('box')
+        box.onmousemove = function (e) {
+            box.innerHTML = `${e.clientX}, ${e.clientY}`
+        }
+        
+        let vm = new Vue({
             el: '#demo',
+            data: {
+                timeout : null
+            },
             methods: {
-                preventShake(func, delay) {
-                    let timeout = {};
-                    return function() {
-                        clearTimeout(timeout)
-                        timeout = setTimeout(() => {
-                            func.apply(this, arguments)
-                        }, delay)
+                debounce() {
+                    if(this.timeout){
+                        clearTimeout(this.timeout)
                     }
+                    this.timeout = setTimeout(()=>{
+                        this.a()
+                    },3000)
                 },
-                shakeClick() {
-                    this.preventShake(function () {
-                        console.log('123');
-                    }, 3000)()
+                a(){
+                    console.log('123')
                 }
             }
-
         })
+        // 防抖函数 触发高频事件后n秒内函数只会执行一次，如果n秒内高频事件再次被触发，则重新计算时间
+        function debounce(func,delay){
+            let timeout = null;
+            return function(){
+                if(timeout){
+                    clearTimeout(timeout)
+                }
+                timeout = setTimeout(function(){
+                    func.apply(this,arguments)
+                },delay)
+            }
+
+        }
         // 防抖 连续重复操作的事件，只是最后一次生效，且在规定的时间之后触发
         // function preventShake(func, delay) {
         //     let timeout = {},
@@ -47,6 +75,9 @@
         // preventShake(function () {
         //     console.log('123');
         // }, 3000)
+        // box.onmousemove = vm.debounce(function (e) {
+        //     box.innerHTML = `${e.clientX}, ${e.clientY}`
+        // }, 1000)
 
     </script>
 </body>
