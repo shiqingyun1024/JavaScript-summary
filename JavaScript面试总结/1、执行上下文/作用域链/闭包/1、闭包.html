@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>闭包</title>
+</head>
+<body>
+    <script>
+        /* 怎么让i 按顺序输出0到4，并且输出5 */
+        // for(let i = 0; i < 5; i++){
+        //     setTimeout(function(){
+        //         console.log(new Date, i);
+        //     },1000)
+        // }
+        // i is not defined
+        // console.log(new Date, i);
+
+        // for(var i = 0; i < 5; i++){
+        //     setTimeout(function(j){
+        //         console.log(new Date, j);
+        //     },1000,i)
+        // }
+        // console.log(new Date, i);
+
+        //
+        var k = '12345' 
+        function a(j){
+            j = 10
+            console.log(j);
+            console.log(k);
+            console.log(typeof k);
+        }
+        a(k)
+    </script>
+</body>
+</html>
