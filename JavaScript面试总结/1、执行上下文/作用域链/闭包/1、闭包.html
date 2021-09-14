@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>闭包</title>
 </head>
+
 <body>
     <script>
         /* 怎么让i 按顺序输出0到4，并且输出5 */
@@ -25,14 +27,70 @@
         // console.log(new Date, i);
 
         //
-        var k = '12345' 
-        function a(j){
-            j = 10
-            console.log(j);
-            console.log(k);
-            console.log(typeof k);
+        // var k = '12345' 
+        // function a(j){
+        //     j = 10
+        //     console.log(j);
+        //     console.log(k);
+        //     console.log(typeof k);
+        // }
+        // a(k)
+
+        // for (var i = 0; i < 5; i++) {
+        //     setTimeout(function (j) {
+        //         console.log(new Date, j);
+        //     }, 1000, i)
+        // }
+        // function circulation() {
+        //     let date = new Date().getTime();
+        //     let date2 = date + 5000
+        //     while (true) {
+        //         date = new Date().getTime();
+        //         if (date > date2) {
+        //             return
+        //         }
+        //     }
+        // }
+        // circulation()
+        // console.log(new Date, i);
+
+        const tasks = []; // 这里存放异步操作的 Promise
+        const output = (i) => new Promise((resolve) => {
+            setTimeout(() => {
+                console.log(new Date, i);
+                resolve();
+            }, 1000 * i);
+        });
+
+        // 生成全部的异步操作
+        for (var i = 0; i < 5; i++) {
+            tasks.push(output(i));
         }
-        a(k)
+
+        // 异步操作完成之后，输出最后的 i
+        Promise.all(tasks).then(() => {
+            setTimeout(() => {
+                console.log(new Date, i);
+            }, 1000);
+        });
+        let basicValue = "努力着";
+        // 可以不加命名参数，但是这种行为不好，以后不好维护代码。
+        function basic(value){
+            value = '加油';
+            console.log(value);
+        }
+        basic(basicValue)
+        console.log(basicValue);
+
+        let objectValue = {a:10}
+        // 可以不加命名参数，但是这种行为不好，以后不好维护代码。
+        function object(value){
+            value.a = 2;
+            console.log(value);
+        }
+        object(objectValue)
+        console.log(objectValue);
     </script>
 </body>
+
 </html>

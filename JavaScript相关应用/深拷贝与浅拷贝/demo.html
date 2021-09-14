@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深拷贝与浅拷贝</title>
+</head>
+
+<body>
+    <script>
+        // 浅拷贝的方法
+        // 数组的方法有 array.from()  array.concat() array.slice()
+        // 对象的方法有 Object.assign
+
+        // 深拷贝的方法
+        // 1、递归
+        function deepClone(obj) {
+            if (obj && typeof obj === 'object') {
+                let newObj = Array.isArray(obj) ? [] : {}
+                for (let key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        newObj[key] = deepClone(obj[key])
+                    }
+                }
+                return newObj
+            }
+            return obj
+        }
+
+        // 2、利用JSON.parse()和JSON.stringify()
+        // 但利用JSON.parse()和JSON.stringify()这种方法会有一些缺陷，
+        // 在序列化处理非数组对象的属性值
+        // （例如 undefined、函数类型、正则表达式类型或者symbol值等）
+        // 时会忽略属性值或者转换为null，而且会抛弃对象的constructor，导致深拷贝之后都变成Object。此外JSON.stringify()在存在循环引用的情况下会抛出异常。
+        function deepClone(obj) {
+            if (obj && typeof obj === 'object') {
+                return JSON.parse(JSON.stringify(obj));
+            }
+            return obj;
+        }
+
+        // 3、包含处理循环引用问题的深拷贝（循环引用的情况）
+        // 循环引用问题的产生原因可能是对象之间相互引用，也可能是对象引用了其自身，而造成死循环的原因则是我们在进行深拷贝时并没有将这种引用情况考虑进去，因此解决问题的关键也就是可以将这些引用存储起来并在发现引用时返回被引用过的对象，从而结束递归的调用。
+        function deepClone(originObj,map = new WeakMap()){
+            if(!orginObj || typeof originObj !== 'object') return originObj; // 空或者非对象则返回本身
+
+            // 如果这个对象已经被记录则直接返回
+            if(map.get(orginObj)){
+                return map.get(orginObj);
+            }
+
+            // 这个对象还没有被记录，将其引用记录在map中，进行拷贝
+            let result = Array.isArray(originObj) ? [] : {}; // 拷贝结果
+            map.set(originObj,result); // 记录引用关系
+            let keys = object.keys(originObj); // originObj的全部key集合
+            // 拷贝
+            for(let i = 0,len=keys.length; i < len; i++){
+                let key = keys[i];
+                let temp = originObj[key];
+                result[key] = deepClone(temp,map);
+            }
+            return result
+        }
+
+    </script>
+</body>
+
+</html>
