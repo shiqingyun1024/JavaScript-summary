@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写发布订阅模式并思考在Vue中的使用</title>
+</head>
+<body>
+    <script>
+        let pubSub = {
+            // 先定义一个数组存放订阅和发布的事件
+            thingsArrs : {},
+            // 发布事件
+            $emit(eventName){
+                if(this.thingsArrs.eventName){
+                    let args = [...arguments].slice(1)
+                    this.thingsArrs.eventName.forEach(item=>{
+                        item(...args)
+                    })
+                }
+            },
+            // 订阅事件,遇到的困惑点：1、订阅的时候怎么把事件名和函数对应起来？答：事件名对应一个数组，数组里面放对应的函数
+            //  2、如果同一个事件名对应多个函数怎么办？答：发布之后，数组里面的函数循环遍历执行。
+            $on(eventName,func){
+                this.thingsArrs = this.thingsArrs || {}
+                if(!this.thingsArrs.eventName){
+                    this.thingsArrs.eventName = []
+                }
+                this.thingsArrs.eventName.push(func)
+            },
+            // 移除订阅事件
+            $remove(eventName){
+               if(this.thingsArrs.eventName){
+                this.thingsArrs.eventName = null;
+               }
+            }
+        }
+        // 订阅事件
+        pubSub.$on('inform',function(){
+            console.log('inform1');
+        })
+        pubSub.$on('inform',function(arg1){
+            console.log('inform2',arg1);
+        })
+        // 发布事件
+        pubSub.$emit('inform','123');
+        // 移除订阅事件
+        pubSub.$remove('inform')
+        // 移除订阅事件后，再发布事件，就不会再执行了。
+        pubSub.$emit('inform','456');
+    </script>
+</body>
+</html>
