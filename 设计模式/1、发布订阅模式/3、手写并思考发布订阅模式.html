@@ -8,9 +8,13 @@
 </head>
 <body>
     <script>
-        let pubSub = {
+        // 刚开始写的时候，是直接写了一个对象，里面定义属性和方法
+        class PubSub{
             // 先定义一个数组存放订阅和发布的事件
-            thingsArrs : {},
+            constructor(){
+                // 存放订阅事件的地方
+                this.thingsArrs = {}
+            }
             // 发布事件
             $emit(eventName){
                 if(this.thingsArrs.eventName){
@@ -19,7 +23,7 @@
                         item(...args)
                     })
                 }
-            },
+            }
             // 订阅事件,遇到的困惑点：1、订阅的时候怎么把事件名和函数对应起来？答：事件名对应一个数组，数组里面放对应的函数
             //  2、如果同一个事件名对应多个函数怎么办？答：发布之后，数组里面的函数循环遍历执行。
             $on(eventName,func){
@@ -28,7 +32,7 @@
                     this.thingsArrs.eventName = []
                 }
                 this.thingsArrs.eventName.push(func)
-            },
+            }
             // 移除订阅事件
             $remove(eventName){
                if(this.thingsArrs.eventName){
@@ -36,6 +40,7 @@
                }
             }
         }
+        let pubSub = new Pubsub();
         // 订阅事件
         pubSub.$on('inform',function(){
             console.log('inform1');
@@ -49,6 +54,9 @@
         pubSub.$remove('inform')
         // 移除订阅事件后，再发布事件，就不会再执行了。
         pubSub.$emit('inform','456');
+
+        // 思考:之前写的订阅发布模式都是写的一个class类，现在是放在一个对象里面，思路都是一样的，但是还是使用类更好一点。
+        // Vue中的发布订阅是 _events放置订阅事件，$emit方法是发布事件，$on方法是订阅事件。
     </script>
 </body>
 </html>
