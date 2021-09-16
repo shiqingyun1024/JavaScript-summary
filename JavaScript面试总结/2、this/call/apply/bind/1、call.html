@@ -28,6 +28,9 @@
         }
         let maxNumber = Math.max.CopyCall(null,1,2,3,4);
         console.log(maxNumber);
+        // 手写关键的点是方法加载Function.prototype上，这样所有的函数都可以使用了。
+        // context = context || window，考虑到context是null的情况下。
+        // 对于参数的处理，arguments是一个类数组，所以处理时要先转化为数组，然后拿到对应的参数。
     </script>
 </body>
 </html>
