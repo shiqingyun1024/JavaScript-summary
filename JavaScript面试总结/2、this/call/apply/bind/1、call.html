@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写call的实现原理</title>
+</head>
+<body>
+    <script>
+        // 日拱一卒。
+        // 手写call的实现原理，一定挂载在Function.prototype上，这样所有的函数或者方法才能使用，原型链还需要再深入的了解一下。
+        Function.prototype.CopyCall = function(context){
+            // 如果调用CopyCall的不是一个函数，直接返回，因为下面要调用这个函数，如果不是函数，就没法调用。
+            if(typeof this !== 'function') return;
+            // 考虑到context是null的情况
+            context = context || window
+            // arguments不能直接使用slice，因为它只是一个类数组，不能使用slice
+            let params = [...arguments].slice(1)
+            // 把要调用的方法赋值到context.fn，使用完之后再删除。
+            context.fn = this
+            // 这一步的时候一定要用扩展运算符，因为params是一个数组。
+            let result = context.fn(...params);
+            // 删除context.fn这个属性值
+            delete context.fn;
+            // 返回执行后的结果。
+            return result
+        }
+        let maxNumber = Math.max.CopyCall(null,1,2,3,4);
+        console.log(maxNumber);
+    </script>
+</body>
+</html>
