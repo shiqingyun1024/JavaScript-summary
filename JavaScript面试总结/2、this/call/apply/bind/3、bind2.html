@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bind</title>
+</head>
+
+<body>
+    <script>
+
+        Function.prototype.myBind = function () {
+            if (typeof this !== 'function') throw 'caller must be a function'
+            let self = this // 这里是关键 用来和new出来的比较原型来判断是否为new出来的  当前函数对象
+            let context = arguments[0] || {}
+            let args = Array.prototype.slice.call(arguments, 1) // 旧：参数
+            let fn = function () {
+                let fnArgs = Array.prototype.slice.call(arguments) // 新：参数
+                // bind 函数的参数 + 延迟函数的参数
+                // 用于检测构造函数的 prototype 属性是否出现在某个实例对象的原型链上
+                self.apply(this instanceof self ? this : context, args.concat(fnArgs))
+            }
+            fn.prototype = Object.create(self.prototype) // 维护原型
+            return fn
+        }
+        let m = Math.max.myBind({},1,2,3,4,5)
+        console.log(m);
+    </script>
+</body>
+
+</html>
