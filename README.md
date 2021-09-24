@@ -5,7 +5,83 @@ JavaScript基础、相关语法、相关应用等的总结
 ```
 
 ## 基础（Javascript高级程序设计）
+### 继承
+```
+《JavaScript高级程序设计》提到了6中继承方式：
+1.原型链继承
+2.借用构造函数（经典继承）
+3.组合继承
+4.原型链继承
+5.寄生式继承
+6.寄生组合式继承
 
+1.原型链继承
+        // 原型链继承
+        function Person(){
+            this.name = 'xiaopao';
+        }
+
+        Person.prototype.getName = function(){
+            console.log(this.name);
+        }
+
+        function Child(){
+            
+        }
+
+        Child.prototype = new Person();
+        var child1 = new Child();
+        child1.getName(); // xiaopao
+
+    缺点：
+
+    1、引用类型的属性（也就是Person的值）被所有实例共享
+    2、在创建Child 的实例时， 不能向Person传参
+
+        function Person(){
+            this.name = 'xiaopao';
+            this.colors = ['red', 'blue', 'green'];
+        }
+
+        Person.prototype.getName = function(){
+            console.log(this.name);
+        }
+
+        function Child(){
+
+        }
+
+        Child.prototype = new Person();
+        var child1 = new Child();
+        var child2 = new Child();
+        child1.colors.push('yellow');
+        console.log(child1.colors);
+        console.log(child2.colors);
+
+2、借用构造函数（经典继承）
+复制父类构造函数内的属性
+
+        // 借用构造函数继承（经典继承）
+        function Person(){
+            this.name = 'xiaopao';
+            this.colors = ['red', 'blue', 'green'];
+        }
+
+        Person.prototype.getName = function(){
+            console.log(this.name);
+        }
+
+        function Child(){
+            Person.call(this);
+        }
+
+        var child1 = new Child();
+        var child2 = new Child();
+        child1.colors.push('yellow');
+        console.log(child1.name);
+        console.log(child1.colors); // ["red", "blue", "green", "yellow"]
+        console.log(child2.colors); // ["red", "blue", "green"]
+```
 ### 8、对象、类与面向对象编程
 ```
 本章内容：
@@ -124,6 +200,7 @@ person1对象本身不具有constructor属性，所以会通过__proto__属性�
         控制函数调用上下文即函数体内this值的能力
         可以将任意对象设置为任意函数的作用域。
 ```
+
 ## JavaScript相关应用
 
 ### JavaScript 图片懒加载
