@@ -148,7 +148,54 @@ var fn = f()
 fn()
 // 1
 
-**注意：最后的结论是手动释放内存，让引用的值直接赋值为null。
+**注意：最后的结论是手动释放内存，让引用的值直接赋值为null。**
+
+闭包的使用场景
+1、例如回调函数，有时候我们希望对异步请求的数据结果进行操作，例如对一个异步返回的数组，求最大值
+function foo (callback) {
+  new Promise((resolve) => {
+    resolve([1, 2, 3, 4])
+  }).then(res => {
+    callback(res)
+  })
+}
+ 
+function bar (arr) {
+  arr.push(10) // arr [1, 2, 3, 4, 10 ]
+  arr.push(6) // arr [ 1, 2, 3, 4, 10, 6 ]
+  Math.max.apply(null, arr) // 10 求最大值
+}
+ 
+foo(bar) 
+// 这就形成了一个闭包，完全符合闭包的定义
+
+2、实现bind函数：其作用是改变this的指向
+// getName 的 this指向foo对象
+let foo = {
+  name: 'jill'
+}
+function getName () {
+  console.log(this.name)
+}
+Function.prototype.myBind = function (obj) {
+  // 将当前函数的this 指向目标对象
+  let _self = this
+  return function () {
+    return _self.call(obj)
+  }
+}
+ 
+let getFooName = getName.myBind(foo)
+getFooName() // jill
+
+3、异步循环调用
+for (var i = 0; i < 2; i++) {
+  (function (i) {
+    setTimeout(() => {
+      console.log(i)
+    })
+  })(i)
+}
 ```
 ### js垃圾回收机制
 ```
