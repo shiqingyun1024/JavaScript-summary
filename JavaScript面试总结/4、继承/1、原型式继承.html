@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>原型式继承</title>
+</head>
+<body>
+    <script>
+        // 原型式继承
+        function CreateObj(o){
+            function F(){}
+            F.prototype = o;
+            // console.log(o.__proto__ === Object.prototype);
+            // console.log(F.prototype.constructor === Object); // true
+            return new F();
+        }
+        var person = {
+            name: 'xiaopao',
+            friend: ['daisy','kelly']
+        }
+        var person1 = CreateObj(person);
+        person1.name = 'person1';
+        console.log(person1.name);
+        console.log(person.name);
+        person1.friend.push('taylor');
+        console.log(person1.friend);
+        person1.friend = ['lulu'];
+        console.log(person1.friend);
+        console.log(person.friend);
+    </script>
+</body>
+</html>

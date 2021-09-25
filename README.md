@@ -14,8 +14,9 @@ JavaScript基础、相关语法、相关应用等的总结
 4.原型链继承
 5.寄生式继承
 6.寄生组合式继承
-
-1.原型链继承
+```
+#### 1.原型链继承
+```
         // 原型链继承
         function Person(){
             this.name = 'xiaopao';
@@ -29,7 +30,7 @@ JavaScript基础、相关语法、相关应用等的总结
             
         }
 
-        Child.prototype = new Person();
+        Child.prototype = new Person();  // 这一步是最关键的。
         var child1 = new Child();
         child1.getName(); // xiaopao
 
@@ -51,14 +52,17 @@ JavaScript基础、相关语法、相关应用等的总结
 
         }
 
-        Child.prototype = new Person();
+        Child.prototype = new Person(); // 这一步是最关键的，Child的原型指向Person的实例。Child的实例，就可以使用Person实例上的方法和属性和实例原型上的方法和属性。
         var child1 = new Child();
         var child2 = new Child();
         child1.colors.push('yellow');
         console.log(child1.colors);
         console.log(child2.colors);
+```       
 
-2、借用构造函数（经典继承）
+#### 2、借用构造函数（经典继承）
+```
+
 复制父类构造函数内的属性
 
         // 借用构造函数继承（经典继承）
@@ -72,7 +76,7 @@ JavaScript基础、相关语法、相关应用等的总结
         }
 
         function Child(){
-            Person.call(this);
+            Person.call(this);// 这一步是最关键的，直接改变了Person的this指向。this的值是变动的，new出来的实例中的name和colors都是唯一的值。
         }
 
         var child1 = new Child();
@@ -81,7 +85,109 @@ JavaScript基础、相关语法、相关应用等的总结
         console.log(child1.name);
         console.log(child1.colors); // ["red", "blue", "green", "yellow"]
         console.log(child2.colors); // ["red", "blue", "green"]
+
+优点：
+1.避免了引用类型的属性被所有实例共享
+2.可以在Child中向Parent传参
+
+缺点：
+1.只是子类的实例，不是父类的实例
+2.方法都在构造函数中定义，每次创建实例都会创建一遍方法
+
+       // 借用构造函数继承， 向Parent传参
+       function Person(name){
+            this.name = name;
+        }
+
+        Person.prototype.getName = function(){
+            console.log(this.name);
+        }
+
+        function Child(name){
+            Person.call(this,name); // 这一步是最关键的。
+        }
+
+        var child1 = new Child('xiaopao');
+        var child2 = new Child('lulu');
+        console.log(child1.name); // xiaopao
+        console.log(child2.name); // lulu
+        console.log(child1 instanceof Person); // false   不能识别是Person的实例
+
+ **注意：function Child(name){
+            Person.call(this,name); // 这一步是最关键的。
+        }**       
 ```
+#### 3、组合继承
+组合 原型链继承 和 借用构造函数继承
+背后的思路是：使用原型链实现对原型方法的继承，而通过借用构造函数来实现对实例属性的继承。
+```
+        function Parent(name){
+            this.name = name;
+            this.colors = ['red', 'blue', 'green'];
+        }
+
+        Parent.prototype.getName = function(){
+            console.log(this.name);
+        }
+
+        function Child(name,age){
+            Parent.call(this,name);// 第二次调用 Parent()  这一步是 借用构造函数
+            this.age = age;
+        }
+
+        Child.prototype = new Parent(); // 第一次调用 Parent()  这一步是 原型链继承
+
+        var child1 = new Child('xiaopao',18);
+        var child2 = new Child('lulu',19);
+        child1.getName(); // xiaopao
+        child2.getName(); // lulu
+        console.log(child1.age); // 18
+        console.log(child2.age); // 19
+        child1.colors.push('yellow');
+        console.log(child1.colors);  // ["red", "blue", "green", "yellow"]
+        console.log(child2.colors); // ["red", "blue", "green"]
+        console.log(child1 instanceof Child); // true
+        console.log(child1 instanceof Parent); // true
+
+优点：融合原型链继承和构造函数的优点，是JavaScript中最常用的继承模式
+缺点：调用了两次父类构造函数
+（组合继承最大的问题是无论什么情况下，都会调用两次超类型构造函数：一次是在创建子类型原型的时候，另一次是在子类型构造函数内部）
+```
+#### 4、原型式继承
+```
+        // 原型式继承
+        function CreateObj(o){
+            function F(){}
+            F.prototype = o;
+            console.log(o.__proto__ === Object.prototype);
+            console.log(F.prototype.constructor === Object); // true
+            return new F();
+        }
+
+        var person = {
+            name: 'xiaopao',
+            friend: ['daisy','kelly']
+        }
+
+        var person1 = CreateObj(person);
+        // var person2 = CreateObj(person);
+
+        person1.name = 'person1';
+        // console.log(person2.name); // xiaopao
+        person1.friend.push('taylor');
+        // console.log(person2.friend); // ["daisy", "kelly", "taylor"]
+        // console.log(person); // {name: "xiaopao", friend: Array(3)}
+        person1.friend = ['lulu'];
+        // console.log(person1.friend); // ["lulu"]
+        // console.log(person.friend); //  ["daisy", "kelly", "taylor"]
+        // 注意： 这里修改了person1.name的值，person2.name的值并未改变，并不是因为person1和person2有独立的name值，而是person1.name='person1'是给person1添加了name值，并非修改了原型上的name值
+        // 因为我们找对象上的属性时，总是先找实例上对象，没有找到的话再去原型对象上的属性。实例对象和原型对象上如果有同名属性，总是先取实例对象上的值
+
+缺点： 包含引用类型的属性值始终都会共享相应的值， 这点跟原型链继承一样
+注意： 这里修改了person1.name的值，person2.name的值并未改变，并不是因为person1和person2有独立的name值，而是person1.name='person1'是给person1添加了name值，并非修改了原型上的name值。
+因为我们找对象上的属性时，总是先找实例上对象，没有找到的话再去原型对象上的属性。实例对象和原型对象上如果有同名属性，总是先取实例对象上的值        
+```
+
 ### 闭包
 ```
 闭包有三个特性：
