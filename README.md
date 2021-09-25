@@ -155,7 +155,8 @@ JavaScript基础、相关语法、相关应用等的总结
 ```
 #### 4、原型式继承
 ```
-        // 原型式继承
+        es6中的原型式继承新的写法就是Object.create()
+        // 原型式继承  
         function CreateObj(o){
             function F(){}  // 主要的步骤
             F.prototype = o;  // 主要的步骤
@@ -187,6 +188,81 @@ JavaScript基础、相关语法、相关应用等的总结
 注意： 这里修改了person1.name的值，person2.name的值并未改变，并不是因为person1和person2有独立的name值，而是person1.name='person1'是给person1添加了name值，并非修改了原型上的name值。
 因为我们找对象上的属性时，总是先找实例上对象，没有找到的话再去原型对象上的属性。实例对象和原型对象上如果有同名属性，总是先取实例对象上的值        
 ```
+#### 5、寄生式继承
+创建一个仅用于封装继承过程的函数，该函数在内部以某种形式来做增强对象，最后返回对象。
+可以理解为在原型式继承的基础上新增一些函数或属性
+```
+        // 寄生式继承  可以理解为在原型式继承的基础上增加一些函数或属性
+        var ob = {
+            name: 'xiaopao',
+            friends: ['lulu','huahua']
+        }
+
+        function CreateObj(o){
+            function F(){};  // 创建一个构造函数F
+            F.prototype = o;
+            return new F();
+        }
+
+        // 上面CreateObj函数 在ECMAScript5 有了一新的规范写法，Object.create(ob) 效果是一样的 , 看下面代码
+        var ob1 = CreateObj(ob);
+        var ob2 = Object.create(ob);
+        console.log(ob1.name); // xiaopao
+        console.log(ob2.name); // xiaopao
+
+        function CreateOb(o){
+            var newob = CreateObj(o); // 创建对象 或者用 var newob = Object.create(ob)
+            newob.sayName = function(){ // 增强对象
+                console.log(this.name);
+            }
+            return newob; // 指定对象
+        }
+
+        var p1 = CreateOb(ob);
+        p1.sayName(); // xiaopao 
+```
+#### 6、寄生组合式继承
+```
+子类构造函数复制父类的自身属性和方法，子类原型只接收父类的原型属性和方法
+
+所谓寄生组合继承，即通过借用构造函数来继承属性，通过原型链的混成形式来继承方法。
+其背后的基本思路是：不必为了指定子类型的原型而调用超类型的构造函数，我们所需要的无非就是超类型的原型的一个副本而已。本质上，就是使用寄生式继承来继承超类型的原型，然后再将结果指定给予类型的原型。
+
+        // 寄生组合式继承
+        function Parent(name){
+            this.name = name;
+            this.colors = ['red', 'blue', 'green'];
+        }
+
+        Parent.prototype.sayName = function(){
+            console.log(this.name);
+        }
+
+        function Child(name,age){
+            Parent.call(this,name); 
+            this.age = age;
+        }
+
+        function CreateObj(o){
+            function F(){};
+            F.prototype = o;
+            return new F();
+        }
+
+        // Child.prototype = new Parent(); // 这里换成下面
+        <!-- 最关键的函数实现 -->
+        function prototype(child,parent){
+            var prototype = CreateObj(parent.prototype);   // var prototype = Object.create(parent.prototype)
+            prototype.constructor = child;
+            child.prototype = prototype;
+        }
+        prototype(Child,Parent);
+
+        var child1 = new Child('xiaopao', 18);
+        console.log(child1); 
+```
+
+
 
 ### 闭包
 ```
