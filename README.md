@@ -157,11 +157,11 @@ JavaScript基础、相关语法、相关应用等的总结
 ```
         // 原型式继承
         function CreateObj(o){
-            function F(){}
-            F.prototype = o;
+            function F(){}  // 主要的步骤
+            F.prototype = o;  // 主要的步骤
             console.log(o.__proto__ === Object.prototype);
             console.log(F.prototype.constructor === Object); // true
-            return new F();
+            return new F();  // 主要的步骤
         }
 
         var person = {
@@ -169,7 +169,7 @@ JavaScript基础、相关语法、相关应用等的总结
             friend: ['daisy','kelly']
         }
 
-        var person1 = CreateObj(person);
+        var person1 = CreateObj(person);  // 主要的步骤
         // var person2 = CreateObj(person);
 
         person1.name = 'person1';

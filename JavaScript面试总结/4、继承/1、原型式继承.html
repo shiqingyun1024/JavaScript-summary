@@ -21,11 +21,18 @@
             friend: ['daisy','kelly']
         }
         var person1 = CreateObj(person);
+        console.log(person1);
+        console.log(typeof person1);
+        // 判断这个对象自身上是否有这个属性
+        console.log(person1.hasOwnProperty('name'));
+        console.log(person1.hasOwnProperty('friend'));
+        // Object.defineProperty()
         person1.name = 'person1';
         console.log(person1.name);
         console.log(person.name);
         person1.friend.push('taylor');
         console.log(person1.friend);
+        console.log(person.friend);
         person1.friend = ['lulu'];
         console.log(person1.friend);
         console.log(person.friend);
