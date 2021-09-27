@@ -31,6 +31,20 @@
         console.log(b.address); // undefined
         console.log(typeof b.address); // undefined
 
+        // HTML5标准规定了setTimeout()的第二个参数的最小值不得小于4毫秒，如果低于这个值，则默认是4毫秒。
+        setTimeout(function(){
+            console.log('1');
+        },1)
+        setTimeout(function(){
+            console.log('0');
+        },0)
+        setTimeout(function(){
+            console.log('100');
+        },100)
+        setTimeout(function(){
+            console.log('50');
+        },50)
+        // 1 0 100 50
     </script>
 </body>
 
