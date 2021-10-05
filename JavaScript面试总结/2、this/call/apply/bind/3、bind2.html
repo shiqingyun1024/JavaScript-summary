@@ -25,8 +25,18 @@
             fn.prototype = Object.create(self.prototype) // 维护原型
             return fn
         }
-        let m = Math.max.myBind({},1,2,3,4,5)
+        function a(name){
+            this.age = 12
+            console.log(name);
+        }
+
+        // let m = Math.max.myBind({},1,2,3,4,5)
+        let m = a.myBind({},1)
+        let m2 = new m();
+        console.log(m2);
+        console.log(m2.age);
         console.log(m);
+        console.log(m());
     </script>
 </body>
 
