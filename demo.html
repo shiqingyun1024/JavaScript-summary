@@ -26,6 +26,7 @@
             address:'123'
         }
         let b = Object.create(a);
+        console.log(Object.prototype.toString.call(b)); // [object Object]
         delete b.address
         b.address = undefined;
         console.log(b.address); // undefined
