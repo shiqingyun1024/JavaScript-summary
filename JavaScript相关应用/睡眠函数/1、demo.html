@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>睡眠函数</title>
+</head>
+
+<body>
+    <script>
+        // 睡眠函数1
+        function sleep(ms) { return new Promise((resolve) => setTimeout(resolve, ms || 3000)) }
+        // 睡眠函数2
+        function sleep(delay) {   //delay:传入等待秒数
+            var start = (new Date()).getTime();  //获取函数刚开始秒数
+            while ((new Date()).getTime() - start < delay) {   //当当前时间减去函数刚开   始时间小于等待秒数时，循环一直进行          
+                continue;
+            }
+        }    
+    </script>
+</body>
+
+</html>
